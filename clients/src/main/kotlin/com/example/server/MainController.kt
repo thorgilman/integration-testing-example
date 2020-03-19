@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
-val SERVICE_NAMES = listOf("Notary", "Network Map Service")
+val SERVICE_NAMES = listOf("Notary", "Notary Service", "Network Map Service")
 
 /**
  *  A Spring Boot Server API controller for interacting with the node via RPC.
@@ -71,9 +71,7 @@ class MainController(rpc: NodeRPCConnection) {
      */
 
     @PostMapping(value = [ "create-iou" ], produces = [ TEXT_PLAIN_VALUE ], headers = [ "Content-Type=application/x-www-form-urlencoded" ])
-    fun createIOU(request: HttpServletRequest): ResponseEntity<String> {
-        val iouValue = request.getParameter("iouValue").toInt()
-        val partyName = request.getParameter("partyName")
+    fun createIOU(@RequestAttribute iouValue: Int, @RequestAttribute partyName: String): ResponseEntity<String> {
         if(partyName == null){
             return ResponseEntity.badRequest().body("Query parameter 'partyName' must not be null.\n")
         }
